@@ -1,0 +1,29 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Hexagon Frame -->
+  <path 
+    d="M100 10L186.6 60V140L100 190L13.4 140V60L100 10Z" 
+    stroke="currentColor" 
+    stroke-width="8" 
+    fill="none"
+  />
+  
+  <!-- Letter B with modern geometric style -->
+  <path 
+    d="M70 50V150M70 50H110C130 50 140 65 140 80C140 90 135 100 125 105C135 110 145 120 145 135C145 155 130 170 105 170H70" 
+    stroke="currentColor" 
+    stroke-width="8" 
+    stroke-linecap="round" 
+    stroke-linejoin="round"
+    fill="none"
+  />
+  
+  <!-- Inner detail line for depth -->
+  <path 
+    d="M85 75H105C115 75 120 85 120 95C120 105 115 115 105 115H85" 
+    stroke="currentColor" 
+    stroke-width="6" 
+    stroke-linecap="round" 
+    fill="none"
+    opacity="0.6"
+  />
+</svg>
