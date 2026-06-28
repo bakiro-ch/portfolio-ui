@@ -6,6 +6,7 @@ import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuL
 import { cn } from "@/lib/utils";
 import { ArrowUpRight, TextAlignJustify } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
+import { FaGithub } from "react-icons/fa";
 
 export type NavigationSection = {
   title: string;
@@ -14,7 +15,7 @@ export type NavigationSection = {
 
 const navigationData: NavigationSection[] = [
   {
-    title: "About us",
+    title: "About",
     href: "#",
   },
   {
@@ -23,18 +24,18 @@ const navigationData: NavigationSection[] = [
   },
   {
     title: "Projects",
+    href: "#projects",
+  },
+  {
+    title: "Skills",
     href: "#",
   },
   {
-    title: "Team",
+    title: "Resume",
     href: "#",
   },
   {
-    title: "Pricing",
-    href: "#",
-  },
-  {
-    title: "Awards",
+    title: "Experience",
     href: "#",
   },
 ];
@@ -85,7 +86,7 @@ const Navbar = () => {
           >
             <a href="#">
               <div className="flex items-center">
-                <Logo className="h-15 w-15 bg-foreground rounded-2xl" />
+                <Logo className="h-10 w-10 bg-primary rounded-xl" />
                 <h1 className="font-semibold text-foreground ml-3 text-2xl">Portfolio</h1>
               </div>
             </a>
@@ -105,7 +106,11 @@ const Navbar = () => {
                 </NavigationMenuList>
               </NavigationMenu>
             </div>
+            <div className="flex justify-center items-center">
+                          <FaGithub/>
             <CollaborateButton className="hidden lg:flex" />
+
+            </div>
 
             <div className="lg:hidden">
               <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
