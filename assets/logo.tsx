@@ -6,7 +6,8 @@ function logo(props:any) {
       xmlns="http://www.w3.org/2000/svg"
       width="1664.000000pt"
       height="928.000000pt"
-      fill="currentColor"
+      fill="white"
+      // fill="currentColor"
       viewBox="0 0 1664.000000 928.000000"
       {...props}
     >
