@@ -1,20 +1,20 @@
 import Link from "next/link";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
-import { MdEmail } from "react-icons/md";
+import { MdEmail, MdDarkMode, MdSunny  } from "react-icons/md";
 
 const socialLinks = [
   {
-    href: "https://github.com/your-username",
+    href: "https://github.com/bakiro-ch",
     label: "GitHub",
     icon: FaGithub,
   },
   {
-    href: "https://linkedin.com/in/your-username",
+    href: "https://linkedin.com/in/aboubekr-essedik-chaif",
     label: "LinkedIn",
     icon: FaLinkedin ,
   },
   {
-    href: "mailto:baki@example.com",
+    href: "mailto:aboubekressedikchaif@gmail.com",
     label: "Email",
     icon: MdEmail,
   },
@@ -22,12 +22,12 @@ const socialLinks = [
 
 export function Footer() {
   return (
-    <footer className="border-t py-6 mt-10 px-10 md:py-0">
+    <footer id="contact" className="border-t py-10 mt-10 px-10 md:py-5 md:px-30">
       <div className="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
         
         <p className="text-center text-sm leading-loose text-muted-foreground md:text-left">
           Built by <Link href="/" className="font-medium underline underline-offset-4">Bakiro</Link>.
-          <br className="hidden sm:inline" />
+          <br className="inline" />
           {" "}The source code is available on{" "}
           <Link
             href="https://github.com/bakiro-ch/portfolio-api"
@@ -49,7 +49,7 @@ export function Footer() {
               rel="noreferrer"
               className="text-muted-foreground transition-colors hover:text-foreground"
             >
-              <social.icon className="h-5 w-5" />
+              <social.icon className="h-6 w-6" />
               <span className="sr-only">{social.label}</span>
             </Link>
           ))}
