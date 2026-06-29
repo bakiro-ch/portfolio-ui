@@ -6,8 +6,7 @@ import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuL
 import { cn } from "@/lib/utils";
 import { ArrowUpRight, TextAlignJustify } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
-import { FaGithub, FaLinkedin } from "react-icons/fa";
-import { ThemeToggle } from "./theme-toggle";
+import { ThemeToggle } from "@/components/features/theme-toggle";
 import Link from "next/link";
 
 export type NavigationSection = {
