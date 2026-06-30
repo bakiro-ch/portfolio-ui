@@ -5,8 +5,9 @@ import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/in
 import { SearchIcon } from 'lucide-react';
 import { Combobox, ComboboxChip, ComboboxChips, ComboboxChipsInput, ComboboxContent, ComboboxEmpty, ComboboxItem, ComboboxList, ComboboxValue, useComboboxAnchor } from '@/components/ui/combobox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { ALL_TECHNOLOGIES } from '@/constants/technologies';
 
-const TECH_FILTERS = ["Next.js", "SvelteKit", "Nuxt.js", "Remix", "Astro"] as const;
+const TECH_FILTERS = ALL_TECHNOLOGIES.map(tech => tech.name);
 const SORT_OPTIONS = [
   { value: 'A → Z', label: 'A → Z' },
   { value: 'Most recent', label: 'Most recent' },

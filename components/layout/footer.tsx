@@ -47,7 +47,7 @@ export function Footer() {
               href={social.href}
               target="_blank"
               rel="noreferrer"
-              className="text-muted-foreground transition-colors hover:text-foreground"
+              className="text-muted-foreground transition-colors hover:text-primary"
             >
               <social.icon className="h-6 w-6" />
               <span className="sr-only">{social.label}</span>

@@ -1,103 +1,88 @@
-import { fetcher } from "@/lib/client";
-import { Card, CardContent, CardHeader, CardFooter } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { notFound } from "next/navigation";
-import Link from "next/link";
-import { Project } from "@/project";
+import { fetcher } from '@/lib/client';
+import { Project } from '@/project';
+import { notFound } from 'next/navigation';
+import { Metadata } from 'next';
 
-interface PageProps {
+import ProjectHeader from '@/components/sections/project-header';
+import ProjectContent from '@/components/sections/project-content';
+import ProjectTechStack from '@/components/sections/project-tech-stack';
+import { Separator } from '@/components/ui/separator';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
+
+type Props = {
   params: Promise<{ slug: string }>;
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+  const project = await getProject(slug);
+  
+  if (!project) {
+    return {
+      title: 'Project Not Found',
+    };
+  }
+
+  return {
+    title: `${project.title} | Baki Portfolio`,
+    description: project.description || `Project built with ${project.technologies?.join(', ')}`,
+    openGraph: {
+      title: project.title,
+      description: project.description || '',
+      images: project.imageUrl ? [{ url: project.imageUrl }] : [],
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: project.title,
+      description: project.description || '',
+      images: project.imageUrl ? [project.imageUrl] : [],
+    },
+  };
 }
 
-export default async function ProjectDetailsPage({ params }: PageProps) {
-  const { slug } = await params;
-  let project: Project | null = null;
-  let error: string | null = null;
-
+async function getProject(slug: string): Promise<Project | null> {
   try {
-    project = await fetcher<Project>(`/projects/${slug}`);
-  } catch (err: any) {
-    if (err.message?.includes("404") || err.message?.toLowerCase().includes("not found")) {
-      notFound(); // يعرض صفحة 404 الافتراضية
-    }
-    error = err.message || "فشل في تحميل بيانات المشروع";
+    const response: any = await fetcher(`/projects/${slug}`);
+    return response?.data || response;
+  } catch (error) {
+    console.error(`Failed to fetch project ${slug}:`, error);
+    return null;
   }
+}
 
-  if (error) {
-    return <div className="container mx-auto py-10 text-destructive text-center">⚠️ {error}</div>;
+export default async function ProjectPage({ params }: Props) {
+  const { slug } = await params;
+  const project = await getProject(slug);
+
+  if (!project) {
+    notFound();
   }
-  if (!project) return null;
 
   return (
-    <main className="container mx-auto py-10 px-4 max-w-4xl">
-      <Card className="overflow-hidden">
-        {/* صورة المشروع */}
-        <div className="w-full h-64 md:h-96 bg-muted relative">
-          {project.imageUrl ? (
-            <img src={project.imageUrl} alt={project.title} className="w-full h-full object-cover" />
-          ) : (
-            <div className="flex items-center justify-center h-full text-muted-foreground">بدون صورة</div>
-          )}
-        </div>
+    <main className="min-h-screen py-10">
+      <article className="container mx-auto px-6 lg:px-10 max-w-5xl">
+        
+        <Button asChild size="sm" className="gap-2 mb-5">
+          <Link href="/#projects">
+            <ArrowLeft className="w-4 h-4" />
+            Back to Projects
+          </Link>
+        </Button>
 
-        <CardHeader>
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <h1 className="text-3xl font-bold tracking-tight">{project.title}</h1>
-            <Badge variant={project.status === "published" ? "default" : "secondary"}>
-              {project.status}
-            </Badge>
-          </div>
-          <p className="text-sm text-muted-foreground mt-2">
-            تاريخ النشر: {new Date(project.createdAt).toLocaleDateString("ar-DZ")}
-          </p>
-        </CardHeader>
+        <ProjectHeader project={project} />
 
-        <CardContent className="space-y-6">
-          {/* الوصف */}
-          <div className="prose max-w-none">
-            <p className="whitespace-pre-wrap text-muted-foreground">
-              {project.description || "لا يوجد وصف متاح."}
-            </p>
-          </div>
+        <Separator className="my-10" />
 
-          {/* التقنيات */}
-          <div>
-            <h3 className="text-lg font-semibold mb-2">التقنيات المستخدمة</h3>
-            <div className="flex flex-wrap gap-2">
-              {project.technologies.map((tech) => (
-                <Badge key={tech} variant="outline">{tech}</Badge>
-              ))}
-            </div>
-          </div>
+        <ProjectContent project={project} />
 
-          {/* دليل التثبيت */}
-          {project.setupGuide && (
-            <div className="bg-muted p-4 rounded-lg">
-              <h3 className="text-lg font-semibold mb-2">📖 دليل التثبيت / التشغيل</h3>
-              <pre className="whitespace-pre-wrap text-sm font-mono bg-background p-4 rounded-md border">
-                {project.setupGuide}
-              </pre>
-            </div>
-          )}
-        </CardContent>
+        <Separator className="my-10" />
 
-        <CardFooter className="flex flex-wrap gap-3 p-6 pt-0">
-          {project.demoLink && (
-            <Button asChild>
-              <a href={project.demoLink} target="_blank" rel="noopener noreferrer">🌐 معاينة حية</a>
-            </Button>
-          )}
-          {project.githubLink && (
-            <Button variant="outline" asChild>
-              <a href={project.githubLink} target="_blank" rel="noopener noreferrer">💻 كود المصدر (GitHub)</a>
-            </Button>
-          )}
-          <Button variant="ghost" asChild>
-            <Link href="/">← العودة للقائمة</Link>
-          </Button>
-        </CardFooter>
-      </Card>
+        <ProjectTechStack technologies={project.technologies} />
+
+      </article>
     </main>
   );
 }

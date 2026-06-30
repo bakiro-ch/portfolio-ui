@@ -19,17 +19,18 @@ export default function ProjectCard({ project, isAboveFold = false }: ProjectCar
       
       <div className="relative aspect-video">
         <Image
-          src={project.imageUrl || "https://placehold.co/600x400"}
+          src={project.imageUrl || "https://placehold.co/600x400/1f2937/6b7280?text=%3C/%3E&font=roboto"}
           alt={project.title}
           fill
-          className="object-cover brightness-60 grayscale transition-all group-hover:brightness-75 group-hover:grayscale-0"
+          className="object-cover brightness-60 transition-all group-hover:brightness-75 "
+          // className="object-cover brightness-60 grayscale transition-all group-hover:brightness-75 group-hover:grayscale-0"
           
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           priority={isAboveFold}
           loading={isAboveFold ? "eager" : "lazy"}
         />
         
-        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors" />
+        {/* <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors" /> */}
 
         {project.isFeatured && (
           <Badge variant="secondary" className="absolute top-3 left-3 z-10">
