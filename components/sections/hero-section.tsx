@@ -1,6 +1,7 @@
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { StatCard } from '@/components/features/stat-card';
+import Link from "next/link";
+import { Button } from "../ui/button";
+import { StatCard } from "../features/stat-card";
+
 export default function HeroSection() {
   return (
     <section className="min-h-screen flex items-center pb-20">
@@ -13,27 +14,42 @@ export default function HeroSection() {
           </h1>
           
           <p className="text-muted-foreground text-lg">
-            I'm Alex — a software engineer focused on building performant, accessible products end-to-end. 
-            I work with React, TypeScript, and modern backend systems to take ideas from prototype to production.
+            I'm <strong>Baki</strong> — a Junior Full-Stack Developer specializing in 
+            <strong> React, TypeScript, and NestJS</strong>. I build performant, 
+            accessible web applications from concept to deployment.
           </p>
           
           <div className="flex flex-wrap gap-3 pt-2">
             <Button asChild size="lg">
               <Link href="#projects">
-                View selected work →
+                View My Work →
               </Link>
             </Button>
-            <Button variant="secondary" size="lg">
-              Read the blog
+            <Button variant="secondary" size="lg" asChild>
+              <Link href="https://github.com/yourusername" target="_blank">
+                GitHub Profile
+              </Link>
             </Button>
           </div>
         </div>
 
         <div className="grid grid-cols-2 gap-4 mt-10 lg:mt-0">
-          <StatCard title="50+" description="Projects Completed" />
-          <StatCard title="100%" description="Client Satisfaction" />
-          <StatCard title="5+" description="Years Experience" />
-          <StatCard title="Global" description="Remote Friendly" />
+          <StatCard 
+            title="2026" 
+            description="CS Graduate" 
+          />
+          <StatCard 
+            title="NestJS/React" 
+            description="Tech Stack" 
+          />
+          <StatCard 
+            title="Algeria" 
+            description="Based In" 
+          />
+          <StatCard 
+            title="Open to Work" 
+            description="Job Opportunities" 
+          />
         </div>
         
       </div>

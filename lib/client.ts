@@ -49,7 +49,6 @@ export async function fetcher<T>(endpoint: string, options?: RequestInit): Promi
 
     const result = await res.json();
     
-    // ✅ الإرجاع المباشر للناتج (بدون .data)
     return result as T; 
     
   } catch (error: any) {

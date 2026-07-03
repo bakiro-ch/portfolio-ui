@@ -15,7 +15,7 @@ export default function ProjectTechStack({ technologies }: ProjectTechStackProps
 
   return (
     <section className="space-y-6">
-      {/* زر العودة + العنوان */}
+
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Layers className="w-5 h-5 text-primary" />
@@ -30,7 +30,6 @@ export default function ProjectTechStack({ technologies }: ProjectTechStackProps
         </Button>
       </div>
 
-      {/* عرض التقنيات مع Tooltip */}
       <TooltipProvider>
         <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4">
           {technologies.map((techName) => {

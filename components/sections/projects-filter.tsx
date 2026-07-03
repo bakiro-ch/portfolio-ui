@@ -6,6 +6,7 @@ import { SearchIcon } from 'lucide-react';
 import { Combobox, ComboboxChip, ComboboxChips, ComboboxChipsInput, ComboboxContent, ComboboxEmpty, ComboboxItem, ComboboxList, ComboboxValue, useComboboxAnchor } from '@/components/ui/combobox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ALL_TECHNOLOGIES } from '@/constants/technologies';
+import Search from '../features/search';
 
 const TECH_FILTERS = ALL_TECHNOLOGIES.map(tech => tech.name);
 const SORT_OPTIONS = [
@@ -33,19 +34,12 @@ export default function ProjectsFilter({
   return (
     <div className="grid lg:grid-cols-2 gap-4">
       {/* Search */}
-      <Field>
-        <InputGroup>
-          <InputGroupInput
-            placeholder="Search projects..."
-            value={searchQuery}
-            onChange={(e) => onSearchChange(e.target.value)}
-            className="pl-10"
-          />
-          <InputGroupAddon align="inline-start">
-            <SearchIcon className="h-4 w-4 text-muted-foreground" />
-          </InputGroupAddon>
-        </InputGroup>
-      </Field>
+      <Search  
+        placeholder="Search Projects..."
+        value={searchQuery}
+        onSearchChange={onSearchChange}
+        className="pl-10"
+      />
 
       {/* Filters Row */}
       <div className="flex flex-wrap gap-4">
