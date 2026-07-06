@@ -1,3 +1,5 @@
+'use client';
+
 import { Button } from "@/components/ui/button";
 import {
   Item,
@@ -16,46 +18,43 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { RiLinkedinLine } from "@remixicon/react";
-import { Delete, DeleteIcon, Edit, Link2, Pencil, Plus, Trash } from "lucide-react";
+import { Pencil, Trash } from "lucide-react";
 import Link from "next/link";
-import { FaLinkedinIn } from "react-icons/fa";
 import { FiGithub } from "react-icons/fi";
-import { TiSocialLinkedin } from "react-icons/ti";
 
-const projects = Array.from({ length: 4 }, (_, i) => ({
-  id: i,
-  title: "Project Title",
-  links: <div className="flex gap-1">
-    <Link href="#">
-        <Button size={'xs'} variant={'outline'}>
-            <RiLinkedinLine   />
-        </Button>
-    </Link>
-    <Link href="#">
-        <Button size={'xs'} variant={'outline'}>
-            <FiGithub  />
-        </Button>
-    </Link>
-  </div>,
-  description:
-    "Project Description Project Description Project Description Project Description Project Description Project Description Project Description Project Description Project Description Project Description",
-  status: "Published",
-  created: "Credit Card",
-  actions: <div className="flex ">
-    <Button variant={'ghost'}>
-        <Link href="#">
-            <Pencil />
-        </Link>
-    </Button>
-    <Button className="hover:text-red-600" variant={'ghost'}>
-        <Link href="#">
-            <Trash  />
-        </Link>
-    </Button>
-  </div>
-}));
+interface MockProject {
+  id: number;
+  title: string;
+  description: string;
+  status: string;
+}
 
-export default function ProjectsTable() {
+const mockProjects: MockProject[] = [
+  { id: 1, title: "E-Commerce Platform", description: "A full-stack e-commerce app built with Next.js and Stripe.", status: "Published" },
+  { id: 2, title: "Task Manager", description: "A Kanban-style task management tool with drag and drop.", status: "Draft" },
+  { id: 3, title: "Portfolio Website", description: "A personal portfolio showcasing projects and skills.", status: "Published" },
+  { id: 4, title: "Chat Application", description: "Real-time messaging app using WebSockets and React.", status: "Draft" },
+];
+
+interface ProjectsTableProps {
+  searchQuery?: string; 
+  statusFilter?: string;
+}
+
+export default function ProjectsTable({ searchQuery = '', statusFilter }: ProjectsTableProps) {
+  
+  const filteredProjects = mockProjects.filter((project) => {
+    const query = searchQuery.toLowerCase();
+    
+    const matchesSearch = 
+      project.title.toLowerCase().includes(query) || 
+      project.description.toLowerCase().includes(query);
+      
+    const matchesStatus = !statusFilter || statusFilter === 'all' || project.status.toLowerCase() === statusFilter;
+
+    return matchesSearch && matchesStatus ;
+  });
+
   return (
     <div className="max-h-[500px] overflow-auto border rounded-md">
       <Table>
@@ -68,29 +67,61 @@ export default function ProjectsTable() {
         </TableHeader>
 
         <TableBody>
-          {projects.map((project) => (
-            <TableRow key={project.id}>
-              <TableCell>
-                <Item>
-                  <ItemMedia>Icon</ItemMedia>
+          {filteredProjects.length > 0 ? (
+            filteredProjects.map((project) => (
+              <TableRow key={project.id}>
+                <TableCell>
+                  <Item>
+                    <ItemMedia>Icon</ItemMedia>
+                    <ItemContent className="min-w-0">
+                      <ItemHeader>
+                        <ItemTitle>{project.title}</ItemTitle>
+                      </ItemHeader>
+                      <ItemDescription className="lg:max-w-lg max-w-xs truncate">
+                        {project.description}
+                      </ItemDescription>
+                    </ItemContent>
+                  </Item>
+                </TableCell>
 
-                  <ItemContent className="min-w-0">
-                    <ItemHeader>
-                      <ItemTitle>{project.title}</ItemTitle>
-                    </ItemHeader>
+                <TableCell className="text-center">{project.status}</TableCell>
 
-                    <ItemDescription className="lg:max-w-lg max-w-xs truncate">
-                      {project.description}
-                    </ItemDescription>
-                  </ItemContent>
-                </Item>
+                <TableCell className="text-center">
+                  <div className="flex justify-center gap-1">
+                    <Link href="#">
+                      <Button size="sm" variant="outline">
+                        <RiLinkedinLine />
+                      </Button>
+                    </Link>
+                    <Link href="#">
+                      <Button size="sm" variant="outline">
+                        <FiGithub />
+                      </Button>
+                    </Link>
+                  </div>
+                </TableCell>
+
+                <TableCell className="text-center">
+                  <div className="flex justify-center">
+                    <Button variant="ghost" size="sm" asChild>
+                      <Link href={`/admin/projects/${project.id}/edit`}>
+                        <Pencil className="w-4 h-4" />
+                      </Link>
+                    </Button>
+                    <Button variant="ghost" size="sm" className="hover:text-red-600">
+                      <Trash className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">
+                No projects found matching your criteria.
               </TableCell>
-
-              <TableCell>{project.status}</TableCell>
-              <TableCell>{project.links}</TableCell>
-              <TableCell>{project.actions}</TableCell>
             </TableRow>
-          ))}
+          )}
         </TableBody>
       </Table>
     </div>

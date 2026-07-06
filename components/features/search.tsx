@@ -13,7 +13,7 @@ export default function Search({placeholder,value,onSearchChange,className}: Sea
     return(
         <Field>
             <InputGroup>
-                <InputGroupInput 
+                <InputGroupInput
                     placeholder= {placeholder}
                     value= {value}
                     onChange= {(e) => onSearchChange(e.target.value)}

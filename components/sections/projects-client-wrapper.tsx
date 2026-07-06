@@ -34,7 +34,7 @@ export default function ProjectsClientWrapper({ initialProjects }: ProjectsClien
         
         if (selectedTechs.length > 0) {
             result = result.filter(p => 
-            selectedTechs.some(tech => p.technologies?.includes(tech))
+            selectedTechs.every(tech => p.technologies?.includes(tech))
         );
         }
         

@@ -17,7 +17,7 @@ export default function RecentProject(){
                     <CardTitle>
 
                         <Button variant={'ghost'}>
-                            <Link href='/projects'>
+                            <Link href='/admin/projects'>
                             View All →
                             </Link>
                         </Button>

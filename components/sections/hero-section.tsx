@@ -26,7 +26,7 @@ export default function HeroSection() {
               </Link>
             </Button>
             <Button variant="secondary" size="lg" asChild>
-              <Link href="https://github.com/yourusername" target="_blank">
+              <Link href="https://github.com/bakiro-ch" target="_blank">
                 GitHub Profile
               </Link>
             </Button>
