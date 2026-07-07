@@ -2,9 +2,21 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Item, ItemActions, ItemContent, ItemDescription, ItemMedia, ItemTitle } from "@/components/ui/item";
+import { fetcher } from "@/lib/client";
+import { ChartNoAxesCombinedIcon, FolderKanban, Settings, Wrench } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
-export default function RecentProject(){
+async function fetchRecentProject() {
+    const recentProject = await fetcher<SuccessProjectsResponse>('/projects/?limit=5');
+    console.log(recentProject)
+    return recentProject.data
+}
+
+export default async function RecentProject(){
+
+    const recentProject = await fetchRecentProject();
+
     return(
         <div className="mt-10 lg:gap-x-5 gap-y-10 grid grid-cols-1 lg:grid-cols-3">
             <Card className="col-span-2">
@@ -23,101 +35,29 @@ export default function RecentProject(){
                         </Button>
                         
                         <br />
-                        <Item>
+                        {
+                            recentProject.map((project)=>
+                        <Item key={project.id}>
                             <ItemMedia>
-                                icon
+                                <Image className="rounded-lg" alt='icon' src={project.imageUrl || 'https://placehold.co/600x400/1f2937/ffffff?text=%3C/%3E'} width={40} height={40} />
                             </ItemMedia>
                             <ItemContent className="min-w-0">
                                 <ItemTitle>
-                                    Project name
+                                    {project.title}
                                 </ItemTitle>
                                 <ItemDescription className="truncate">
-                                    here is the description  description description descriptionvdescriptionv description description description description description description.
+                                    {project.description}
                                 </ItemDescription>
 
                             </ItemContent>
                             <ItemActions>
                                 <Badge>
-                                    published
+                                    {project.status}
                                 </Badge>
                             </ItemActions>
                         </Item>
-                        <Item>
-                            <ItemMedia>
-                                icon
-                            </ItemMedia>
-                            <ItemContent className="min-w-0">
-                                <ItemTitle>
-                                    Project name
-                                </ItemTitle>
-                                <ItemDescription className="truncate">
-                                    here is the description  description description descriptionvdescriptionv description description description description description description.
-                                </ItemDescription>
-
-                            </ItemContent>
-                            <ItemActions>
-                                <Badge>
-                                    published
-                                </Badge>
-                            </ItemActions>
-                        </Item>
-                        <Item>
-                            <ItemMedia>
-                                icon
-                            </ItemMedia>
-                            <ItemContent className="min-w-0">
-                                <ItemTitle>
-                                    Project name
-                                </ItemTitle>
-                                <ItemDescription className="truncate">
-                                    here is the description  description description descriptionvdescriptionv description description description description description description.
-                                </ItemDescription>
-
-                            </ItemContent>
-                            <ItemActions>
-                                <Badge>
-                                    published
-                                </Badge>
-                            </ItemActions>
-                        </Item>
-                        <Item>
-                            <ItemMedia>
-                                icon
-                            </ItemMedia>
-                            <ItemContent className="min-w-0">
-                                <ItemTitle>
-                                    Project name
-                                </ItemTitle>
-                                <ItemDescription className="truncate">
-                                    here is the description  description description descriptionvdescriptionv description description description description description description.
-                                </ItemDescription>
-
-                            </ItemContent>
-                            <ItemActions>
-                                <Badge>
-                                    published
-                                </Badge>
-                            </ItemActions>
-                        </Item>
-                        <Item>
-                            <ItemMedia>
-                                icon
-                            </ItemMedia>
-                            <ItemContent className="min-w-0">
-                                <ItemTitle>
-                                    Project name
-                                </ItemTitle>
-                                <ItemDescription className="truncate">
-                                    here is the description  description description descriptionvdescriptionv description description description description description description.
-                                </ItemDescription>
-
-                            </ItemContent>
-                            <ItemActions>
-                                <Badge variant={'outline'}>
-                                    published
-                                </Badge>
-                            </ItemActions>
-                        </Item>
+                            )
+                    }
                     </CardTitle>
                 </CardContent>
             </Card>
@@ -128,28 +68,28 @@ export default function RecentProject(){
                     </CardTitle>
                 </CardHeader>
                 <CardContent className="flex flex-col gap-3">
-                    <Link href='' className="">
+                    <Link href='/admin' className="">
                         <Button variant={'outline'} className="flex cursor-pointer gap-3 w-full justify-start" >
-                            <p>icon</p>
+                            <ChartNoAxesCombinedIcon className="text-primary" />
                             <p>Dachboard</p>
                         </Button>
                     </Link>
-                    <Link href='' className="">
+                    <Link href='/admin/projects' className="">
                         <Button variant={'outline'} className="flex cursor-pointer gap-3 w-full justify-start" >
-                            <p>icon</p>
-                            <p>Dachboard</p>
+                            <FolderKanban className="text-primary" />
+                            <p>Projects</p>
                         </Button>
                     </Link>
-                    <Link href='' className="">
+                    <Link href='#' className="">
                         <Button variant={'outline'} className="flex cursor-pointer gap-3 w-full justify-start" >
-                            <p>icon</p>
-                            <p>Dachboard</p>
+                            <Wrench className="text-primary" />
+                            <p>Skills</p>
                         </Button>
                     </Link>
-                    <Link href='' className="">
+                    <Link href='#' className="">
                         <Button variant={'outline'} className="flex cursor-pointer gap-3 w-full justify-start" >
-                            <p>icon</p>
-                            <p>Dachboard</p>
+                            <Settings className="text-primary" />
+                            <p>Settings</p>
                         </Button>
                     </Link>
                 </CardContent>

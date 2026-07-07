@@ -4,7 +4,7 @@ import { Combobox, ComboboxChip, ComboboxChips, ComboboxChipsInput, ComboboxCont
 import { Field, FieldGroup, FieldLabel, FieldLegend, FieldSet } from "@/components/ui/field";
 import React from "react";
 
-export default function MyCombobox({frameworks,placeholder, label}:{frameworks: string[], placeholder:string, label?:string}) {
+export default function MyCombobox({frameworks,placeholder, label, defaultValue}:{frameworks: string[], placeholder:string, label?:string, defaultValue: string[]}) {
     const anchor = useComboboxAnchor()
     return(
         <Field>
@@ -12,6 +12,7 @@ export default function MyCombobox({frameworks,placeholder, label}:{frameworks: 
             <Combobox multiple
                         autoHighlight
                         items={frameworks}
+                        defaultValue={defaultValue}
                         // defaultValue={[frameworks[0]]}
                 >
                 <ComboboxChips ref={anchor} className="w-full max-w-xs">

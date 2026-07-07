@@ -1,5 +1,6 @@
 'use client';
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Item,
@@ -17,8 +18,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { RiLinkedinLine } from "@remixicon/react";
-import { Pencil, Trash } from "lucide-react";
+import { MoveUpRight, Pencil, Trash } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { FiGithub } from "react-icons/fi";
 
@@ -36,25 +37,8 @@ const mockProjects: MockProject[] = [
   { id: 4, title: "Chat Application", description: "Real-time messaging app using WebSockets and React.", status: "Draft" },
 ];
 
-interface ProjectsTableProps {
-  searchQuery?: string; 
-  statusFilter?: string;
-}
-
-export default function ProjectsTable({ searchQuery = '', statusFilter }: ProjectsTableProps) {
+export default function ProjectsTable({projects }:{projects:Project[]}) {
   
-  const filteredProjects = mockProjects.filter((project) => {
-    const query = searchQuery.toLowerCase();
-    
-    const matchesSearch = 
-      project.title.toLowerCase().includes(query) || 
-      project.description.toLowerCase().includes(query);
-      
-    const matchesStatus = !statusFilter || statusFilter === 'all' || project.status.toLowerCase() === statusFilter;
-
-    return matchesSearch && matchesStatus ;
-  });
-
   return (
     <div className="max-h-[500px] overflow-auto border rounded-md">
       <Table>
@@ -67,12 +51,14 @@ export default function ProjectsTable({ searchQuery = '', statusFilter }: Projec
         </TableHeader>
 
         <TableBody>
-          {filteredProjects.length > 0 ? (
-            filteredProjects.map((project) => (
+          {projects.length > 0 ? (
+            projects.map((project) => (
               <TableRow key={project.id}>
                 <TableCell>
                   <Item>
-                    <ItemMedia>Icon</ItemMedia>
+                    <ItemMedia>
+                      <Image className="rounded-lg bg-cover" src={project.imageUrl || "https://placehold.co/600x400/1f2937/ffffff?text=%3C/%3E"} alt="icon" height={50} width={50} />
+                    </ItemMedia>
                     <ItemContent className="min-w-0">
                       <ItemHeader>
                         <ItemTitle>{project.title}</ItemTitle>
@@ -84,27 +70,33 @@ export default function ProjectsTable({ searchQuery = '', statusFilter }: Projec
                   </Item>
                 </TableCell>
 
-                <TableCell className="text-center">{project.status}</TableCell>
+                <TableCell className="text-center"><Badge variant={'default'}>{project.status}</Badge></TableCell>
 
                 <TableCell className="text-center">
                   <div className="flex justify-center gap-1">
-                    <Link href="#">
-                      <Button size="sm" variant="outline">
-                        <RiLinkedinLine />
-                      </Button>
-                    </Link>
-                    <Link href="#">
-                      <Button size="sm" variant="outline">
-                        <FiGithub />
-                      </Button>
-                    </Link>
+                    
+                      <a href={project.demoLink}>
+                        <Button size="xs" variant="outline">
+                          <MoveUpRight />
+                        </Button>
+                      </a>
+
+                    {
+                      project.githubLink &&
+                      <a target="_blank" href={project.githubLink}>
+                        <Button size="xs" variant="outline">
+                          <FiGithub />
+                        </Button>
+                      </a>
+                    }
+
                   </div>
                 </TableCell>
 
                 <TableCell className="text-center">
                   <div className="flex justify-center">
                     <Button variant="ghost" size="sm" asChild>
-                      <Link href={`/admin/projects/${project.id}/edit`}>
+                      <Link href={`/admin/projects/${project.slug}/edit`}>
                         <Pencil className="w-4 h-4" />
                       </Link>
                     </Button>

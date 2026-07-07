@@ -11,7 +11,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <SidebarProvider>
-      <SideBar />
+      <SideBar title={title} />
       <SidebarInset>
         <AdminHeader title={title} />
         <main className="flex-1 p-10 overflow-y-auto">

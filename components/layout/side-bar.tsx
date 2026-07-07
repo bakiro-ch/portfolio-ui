@@ -28,7 +28,31 @@ export function AdminHeader({title}:{title: string}){
   )
 }
 
-export default function SideBar (){
+export default function SideBar ({title}: {title: string}){
+
+  const navBarMenuItems = [
+    {
+      href: "/admin",
+      name: "Dashboard",
+      icon: <ChartNoAxesCombinedIcon />
+    },
+    {
+      href: "/admin/projects",
+      name: "Projects",
+      icon: <FolderKanban />
+    },
+    {
+      href: "#",
+      name: "Skills",
+      icon: <Wrench />
+    },
+    {
+      href: "#",
+      name: "Settings",
+      icon: <Settings />
+    },
+  ];
+
     return(
     <Sidebar collapsible="offcanvas" variant="sidebar">
       <SidebarHeader className="border-b border-sidebar-border">
@@ -58,47 +82,16 @@ export default function SideBar (){
                     Menu
                 </SidebarGroupLabel>
                 <SidebarMenu>
-                  <SidebarMenuItem >
-                    <SidebarMenuButton isActive  asChild>
-                      <a href='/admin'>
-                        <ChartNoAxesCombinedIcon />
-                        <span>Dashboard</span>
+                  {navBarMenuItems.map(item => 
+                  <SidebarMenuItem key={item.name}>
+                    <SidebarMenuButton className={title === item.name ? "bg-accent" : ''} asChild>
+                      <a href={item.href}>
+                        {item.icon}
+                        <span>{item.name}</span>
                       </a>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
-
-                  <SidebarMenuItem >
-                    <SidebarMenuButton asChild>
-                      <a href='/admin/projects'>
-                        <FolderKanban  />
-                        <span>Projects</span>
-                      </a>
-                    </SidebarMenuButton>
-                    <SidebarMenuBadge className='bg-primary/10 top-1/2! right-2 -translate-y-1/2! rounded-full'>
-                      3
-                    </SidebarMenuBadge>
-                  </SidebarMenuItem>
-
-                  <SidebarMenuItem>
-                        <SidebarMenuBadge className='bg-primary/10 top-1/2! right-2 -translate-y-1/2! rounded-full'>
-                            21
-                        </SidebarMenuBadge>
-                    <SidebarMenuButton asChild>
-                        <a href="#">
-                            <Wrench />
-                            Skills
-                        </a>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
-                        <a href="#">
-                            <Settings  />
-                            Settings
-                        </a>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
+                  )}
 
                 </SidebarMenu>
             </SidebarGroupContent>

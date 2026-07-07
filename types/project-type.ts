@@ -14,3 +14,20 @@ interface Project{
     createdAt: string;
     updatedAt: string;    
 }
+
+interface ProjectsMeta {
+    page: number,
+    limit: number,
+    total: number,
+    totalPages: number
+}
+
+interface SuccessProjectsResponse {
+    sucess: boolean,
+    data: Project[],
+    meta: ProjectsMeta
+}
+interface SuccessProjectResponse {
+    sucess: boolean,
+    data: Project
+}
