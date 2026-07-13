@@ -8,9 +8,13 @@ import Image from "next/image";
 import Link from "next/link";
 
 async function fetchRecentProject() {
-    const recentProject = await fetcher<SuccessProjectsResponse>('/projects/?limit=5');
-    console.log(recentProject)
-    return recentProject.data
+    try{
+        const recentProject = await fetcher<SuccessProjectsResponse>('/admin/projects/?limit=5');
+        console.log(recentProject);
+        return recentProject.data;
+    }catch (error: any){
+        console.log(error);
+    }
 }
 
 export default async function RecentProject(){
@@ -35,7 +39,7 @@ export default async function RecentProject(){
                         </Button>
                         
                         <br />
-                        {
+                        {recentProject &&
                             recentProject.map((project)=>
                         <Item key={project.id}>
                             <ItemMedia>

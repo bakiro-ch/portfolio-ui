@@ -1,17 +1,66 @@
+'use client'
+
 import { Button } from "@/components/ui/button";
 import { Card,CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Field,
-  FieldDescription,
   FieldGroup,
   FieldLabel,
-  FieldSeparator,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import Logo from "@/assets/logo";
 
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { fetcher } from "@/lib/client";
+import { useState } from "react";
+import { SpinnerCustom } from "@/components/ui/spinner";
+import { useRouter } from "next/navigation"
+
+const loginSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
+});
+
+//Zod automatically creates the TypeScript type!
+type LoginForm = z.infer<typeof loginSchema>;
+// LoginForm is now strictly typed as: { email: string, password: string }
+
 const LoginForm = () => {
+
+  const router = useRouter();
+
+  const {register, handleSubmit, formState: { errors, isSubmitting } } = useForm<LoginForm>({
+    resolver: zodResolver(loginSchema),
+    mode: 'onBlur',
+  });
+
+  const [error, setError] = useState<ErrorResponse | null>(null);
+
+  const onSubmit = async (data: LoginForm) => {
+    try{
+
+      const res = await fetcher<LoginSuccessResponse>('/auth/login',{
+        method: 'POST',
+        body: JSON.stringify(data),
+      });
+
+      const cookie = document.cookie = `token=${res.token}; path=/; max-age=${ 7 * 24 * 60 * 60 }`;
+
+      setError(null);
+
+      console.log(cookie);
+
+      router.push('/admin');
+
+    } catch(error : any){
+      setError(error);
+    }
+  };
+
+
   return (
     <section className="bg-foreground dark:bg-background min-h-screen flex items-center justify-center relative">
       <div className="pointer-events-none absolute inset-0 right-0 overflow-hidden md:block hidden">
@@ -26,7 +75,7 @@ const LoginForm = () => {
           <CardHeader className="text-center gap-6 p-0">
             <div className="mx-auto">
               <a href="">
-                <Logo className="w-15 h-15 bg-black rounded-2xl" />
+                <Logo className="w-15 h-15 bg-primary rounded-2xl" />
               </a>
             </div>
             <div className="flex flex-col gap-1">
@@ -38,8 +87,24 @@ const LoginForm = () => {
               </CardDescription>
             </div>
           </CardHeader>
+          {error && (
+            <div className="bg-destructive/10 text-destructive rounded-lg py-2 px-4 text-sm">
+              {/* Check if the backend sent an array of specific errors */}
+              {error.errors && error.errors.length > 0 ? (
+                <ul className="list-disc list-inside space-y-1">
+                  {error.errors.map((err: string, index: number) => (
+                    <li key={index}>{err}</li>
+                  ))}
+                </ul>
+              ) : (
+                // If there are no specific errors, just show the general message
+                <p>{error.message || "An unexpected error occurred."}</p>
+              )}
+            </div>
+          )}
           <CardContent className="p-0">
-            <form>
+            <form onSubmit={handleSubmit(onSubmit)}
+            >
               <FieldGroup className="gap-6">
                 {/* <Field className="grid md:grid-cols-2 md:gap-6 gap-3">
                   <Button
@@ -85,12 +150,16 @@ const LoginForm = () => {
                       Email*
                     </FieldLabel>
                     <Input
+                    {...register('email')}
                       id="email"
-                      type="email"
+                      // type="email"
                       placeholder="example@mail.com"
-                      required
+                      // required
                       className="dark:bg-background h-9 shadow-xs"
                     />
+                    {errors.email && (
+                      <p className="text-xs text-red-500 mt-1">{errors.email.message}</p>
+                    )}
                   </Field>
                   <Field className="gap-1.5">
                     <FieldLabel
@@ -101,12 +170,16 @@ const LoginForm = () => {
                     </FieldLabel>
 
                     <Input
+                    {...register('password')}
                       id="password"
                       type="password"
                       placeholder="Enter your password"
-                      required
+                      // required
                       className="dark:bg-background h-9 shadow-xs"
                     />
+                      {errors.password && (
+                      <p className="text-xs text-red-500 mt-1">{errors.password.message}</p>
+                    )}
                   </Field>
                 </div>
 
@@ -133,8 +206,8 @@ const LoginForm = () => {
                 </Field>
 
                 <Field className="gap-4">
-                  <Button type="submit" size={"lg"} className="rounded-lg h-10 hover:bg-primary/80 cursor-pointer">
-                    Sign in
+                  <Button type="submit" size={"lg"} variant={isSubmitting ? 'secondary' : 'default'}>
+                    {isSubmitting ? <SpinnerCustom/> : 'Sign in →' }
                   </Button>
                   {/* <FieldDescription className="text-center text-sm font-normal text-muted-foreground">
                     Don&apos;t have an account?{" "}

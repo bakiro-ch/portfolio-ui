@@ -31,3 +31,23 @@ interface SuccessProjectResponse {
     sucess: boolean,
     data: Project
 }
+
+interface ErrorResponse{
+    success: boolean,
+    message: string,
+    error: string,
+    statusCoode: number,
+    errors?: string[],
+    timestamp: string;
+}
+
+interface LoginSuccessResponse{
+    success: boolean,
+    token: string,
+    user: UserPayload
+}
+interface UserPayload{
+    id: string,
+    role: 'ADMIN' | 'USER',
+    email: string
+}
