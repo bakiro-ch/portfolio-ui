@@ -9,7 +9,7 @@ import Link from "next/link";
 
 export function AdminHeader({title}:{title: string}){
     return (
-      <header className="flex justify-between p-4 border-b">
+      <header className="flex sticky top-0 z-50 bg-background justify-between p-4 border-b">
         <div className="flex gap-x-1">
           <SidebarTrigger className="-ml-1" />
           <Separator orientation="vertical" className="mr-1 w-[1px] h-7" />

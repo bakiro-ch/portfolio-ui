@@ -15,22 +15,30 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { fetcher } from "@/lib/client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SpinnerCustom } from "@/components/ui/spinner";
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
+import { setCookie } from "cookies-next";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
   password: z.string().min(8, "Password must be at least 8 characters"),
 });
 
-//Zod automatically creates the TypeScript type!
 type LoginForm = z.infer<typeof loginSchema>;
-// LoginForm is now strictly typed as: { email: string, password: string }
 
 const LoginForm = () => {
 
   const router = useRouter();
+  
+  const [callbackUrl, setCallbackUrl] = useState('/admin'); // Default fallback
+
+  // ✅ Safely read the callbackUrl from the URL ONCE when the component mounts
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const url = params.get('callbackUrl') || '/admin';
+    setCallbackUrl(url);
+  }, []); // Empty array ensures this runs ONLY ONCE
 
   const {register, handleSubmit, formState: { errors, isSubmitting } } = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
@@ -40,26 +48,27 @@ const LoginForm = () => {
   const [error, setError] = useState<ErrorResponse | null>(null);
 
   const onSubmit = async (data: LoginForm) => {
-    try{
-
-      const res = await fetcher<LoginSuccessResponse>('/auth/login',{
+    try {
+      const res = await fetcher<LoginSuccessResponse>('/auth/login', {
         method: 'POST',
         body: JSON.stringify(data),
       });
 
-      const cookie = document.cookie = `token=${res.token}; path=/; max-age=${ 7 * 24 * 60 * 60 }`;
+      setCookie('token', res.token, {
+        maxAge: 7 * 24 * 60 * 60,
+        path: '/',
+      });
 
       setError(null);
 
-      console.log(cookie);
+      // ✅ USE THE CALLBACK URL HERE INSTEAD OF '/admin'
+      // window.location.href = callbackUrl; 
+      router.replace(callbackUrl);
 
-      router.push('/admin');
-
-    } catch(error : any){
+    } catch (error: any) {
       setError(error);
     }
   };
-
 
   return (
     <section className="bg-foreground dark:bg-background min-h-screen flex items-center justify-center relative">

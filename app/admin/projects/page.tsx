@@ -2,8 +2,8 @@ import ProjectsSection from "@/components/sections/admin/projects-section";
 import { fetcher } from "@/lib/client";
 
 async function fetchProjects() {
-    const projects =  await fetcher<SuccessProjectsResponse>('/projects');
-    return projects.data
+    const projects =  await fetcher<SuccessProjectsResponse>('/admin/projects');
+    return projects.data;
 }
 
 export default async function Projects() {

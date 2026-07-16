@@ -33,7 +33,7 @@ export default function ProjectsGrid({ projects, isLoading, error }: ProjectsGri
   }
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+    <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-5">
       {projects.map((project, index) => (
         <ProjectCard key={project.id} project={project} isAboveFold={index < 3} />
       ))}

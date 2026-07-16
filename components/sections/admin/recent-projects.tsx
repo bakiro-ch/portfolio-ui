@@ -10,7 +10,6 @@ import Link from "next/link";
 async function fetchRecentProject() {
     try{
         const recentProject = await fetcher<SuccessProjectsResponse>('/admin/projects/?limit=5');
-        console.log(recentProject);
         return recentProject.data;
     }catch (error: any){
         console.log(error);
